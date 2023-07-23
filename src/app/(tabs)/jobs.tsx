@@ -1,12 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 
-export default function ModalScreen() {
+export default function Jobs() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+      <Text style={styles.title}>Jobs</Text>
     </View>
   );
 }
