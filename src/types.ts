@@ -12,4 +12,6 @@ export type User = {
   name: string
   position: string
   image?: string
+  bgImage?: string
+  about?: string
 }
