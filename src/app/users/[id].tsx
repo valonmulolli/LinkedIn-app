@@ -1,8 +1,9 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { Text, View, Pressable, Image, StyleSheet } from 'react-native';
+import { Text, View, Pressable, Image, StyleSheet,ScrollView } from 'react-native';
 import userJson from '../../../assets/data/user.json';
 import { useLayoutEffect, useState } from 'react';
 import { User } from '@/types';
+import ExperienceListitem from './../../components/ExperienceListitem';
 
 export default function UserProfile() {
 	const [user, setUser] = useState<User>(userJson);
@@ -19,7 +20,7 @@ export default function UserProfile() {
 	};
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 			{/* Header */}
 			<View style={styles.header}>
 				{/* BG Image */}
@@ -46,7 +47,13 @@ export default function UserProfile() {
 			</View>
 
 			{/* Experience */}
-		</View>
+			<View style={styles.section}>
+				<Text style={styles.sectionTitle}>Experience</Text>
+				{user.experience?.map((experience) => (
+					<ExperienceListitem experience={experience}key={experience.id}/>
+				))}
+			</View>
+		</ScrollView>
 	);
 }
 
