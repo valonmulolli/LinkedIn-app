@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
 	container: {},
 	header: {
 		backgroundColor: 'white',
+		marginBottom: 5
 	},
 	bgImage: {
 		width: '100%',
