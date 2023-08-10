@@ -8,9 +8,7 @@ import Post from './post';
 import Notifications from './notifications';
 import Jobs from './jobs';
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
+
 function TabBarIcon(props: {
 	name: React.ComponentProps<typeof FontAwesome>['name'];
 	color: string;
@@ -33,13 +31,13 @@ export default function TabLayout() {
 					title: 'Home Feed',
 					tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
 					headerRight: () => (
-						<Link href='/modal' asChild>
+						<Link href='/search' asChild>
 							<Pressable>
 								{({ pressed }) => (
 									<FontAwesome
-										name='info-circle'
+										name='search'
 										size={24}
-										color={Colors[colorScheme ?? 'light'].text}
+										color='gray'
 										style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
 									/>
 								)}
