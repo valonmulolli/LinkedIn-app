@@ -7,6 +7,7 @@ export type Post = {
   // comments: number
 }
 
+
 export type User = {
   id: string
   name: string
