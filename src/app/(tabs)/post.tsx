@@ -1,33 +1,59 @@
-import { StyleSheet, TextInput, Pressable,Image } from 'react-native';
+import { StyleSheet, TextInput, Pressable, Image } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { useNavigation, useRouter } from 'expo-router';
 import { useLayoutEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { gql, useMutation } from '@apollo/client';
+
+const insertPost = gql`
+	mutation MyMutation($userid: ID, $image: String, $content: String!) {
+		insertPost(userid: $userid, image: $image, content: $content) {
+			content
+			id
+			image
+			userid
+		}
+	}
+`;
 
 export default function Post() {
 	const navigation = useNavigation();
 	const router = useRouter();
+	const [handleMutation, { loading, error, data }] = useMutation(insertPost);
 	const [text, setText] = useState('');
 	const [image, setImage] = useState<string | null>(null);
 
-	const onPost = () => {
+	const onPost = async () => {
 		console.warn('Posting: ', text);
 
-		router.push('/(tabs)/');
-		setText('');
-    setImage(null);
+		try {
+			await handleMutation({
+				variables: {
+					userid: 2,
+					text,
+				},
+			});
+
+			router.push('/(tabs)/');
+			setText('');
+			setImage(null);
+		} catch (e) {
+			console.log(e); 
+		}
 	};
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
 			headerRight: () => (
 				<Pressable onPress={onPost} style={styles.postButton}>
-					<Text style={styles.postButtonText}>Post</Text>
+					<Text style={styles.postButtonText}>
+						{loading ? 'Posting...' : 'Post'}
+					</Text>
 				</Pressable>
 			),
 		});
-	}, [onPost]);
+	}, [onPost, loading]);
 
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
@@ -55,14 +81,14 @@ export default function Post() {
 				multiline={true}
 			/>
 
-      {image && <Image source={{ uri: image }} style={styles.image}/>}
+			{image && <Image source={{ uri: image }} style={styles.image} />}
 
 			<View style={styles.footer}>
 				<Pressable onPress={pickImage} style={styles.iconButton}>
 					<FontAwesome name='image' size={24} color='black' />
 				</Pressable>
 				<View style={styles.iconButton}>
-        <MaterialIcons name="filter" size={24} color="black" />
+					<MaterialIcons name='filter' size={24} color='black' />
 				</View>
 				<View style={styles.iconButton}>
 					<MaterialIcons name='more-horiz' size={24} color='black' />
@@ -95,11 +121,11 @@ const styles = StyleSheet.create({
 		color: 'gray',
 		fontWeight: '600',
 	},
-  image :{
-    width: '100%',
-    aspectRatio: 1,
-    marginTop: 'auto'
-  },
+	image: {
+		width: '100%',
+		aspectRatio: 1,
+		marginTop: 'auto',
+	},
 	footer: {
 		marginTop: 'auto',
 		flexDirection: 'row',

@@ -28,10 +28,8 @@ export default function HomeFeedScreen() {
 
 	if (error) {
 		console.log(error);
-		return <Text>Error</Text>;
+		return <Text>Not Found</Text>;
 	}
-
-	console.log(data);
 
 	return (
 		<FlatList
