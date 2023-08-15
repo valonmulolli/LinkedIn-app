@@ -25,7 +25,7 @@ export default function Post() {
 	const [image, setImage] = useState<string | null>(null);
 
 	const onPost = async () => {
-		console.warn('Posting: ', text);
+		console.warn(`Posting: ${text}`);
 
 		try {
 			await handleMutation({
