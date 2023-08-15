@@ -1,30 +1,71 @@
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { Text, View, Pressable, Image, StyleSheet,ScrollView } from 'react-native';
+import {
+	Text,
+	View,
+	Pressable,
+	Image,
+	StyleSheet,
+	ScrollView,
+	ActivityIndicator,
+} from 'react-native';
 import userJson from '../../../assets/data/user.json';
 import { useLayoutEffect, useState } from 'react';
 import { User } from '@/types';
 import ExperienceListitem from './../../components/ExperienceListitem';
+import { gql, useQuery } from '@apollo/client';
+
+const query = gql`
+	query MyQuery($id: ID!) {
+		profile(id: $id) {
+			id
+			name
+			image
+			position
+			about
+			experience {
+				id
+				companyname
+				companyimage
+				title
+				userid
+			}
+			backimage
+		}
+	}
+`;
 
 export default function UserProfile() {
-	const [user, setUser] = useState<User>(userJson);
+	// const [user, setUser] = useState<User>(userJson);
 
 	const { id } = useLocalSearchParams();
+
+	const { loading, error, data } = useQuery(query, { variables: { id } });
+	const user = data?.profile;
 	const navigation = useNavigation();
 
 	useLayoutEffect(() => {
-		navigation.setOptions({ title: user.name });
+		navigation.setOptions({ title: user?.name || 'User' });
 	}, [user?.name]);
 
 	const onConnect = () => {
 		console.warn('Connect');
 	};
 
+	if (loading) {
+		return <ActivityIndicator />;
+	}
+	if (error) {
+		console.log(error);
+		return <Text>Something went wrong...</Text>;
+	}
+	console.log(data);
+
 	return (
 		<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
 			{/* Header */}
 			<View style={styles.header}>
 				{/* BG Image */}
-				<Image source={{ uri: user.bgImage }} style={styles.bgImage} />
+				<Image source={{ uri: user.backimage }} style={styles.bgImage} />
 
 				<View style={{ padding: 10, paddingTop: 0 }}>
 					{/* Profile Image */}
@@ -50,7 +91,7 @@ export default function UserProfile() {
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Experience</Text>
 				{user.experience?.map((experience) => (
-					<ExperienceListitem experience={experience}key={experience.id}/>
+					<ExperienceListitem experience={experience} key={experience.id} />
 				))}
 			</View>
 		</ScrollView>
@@ -61,7 +102,7 @@ const styles = StyleSheet.create({
 	container: {},
 	header: {
 		backgroundColor: 'white',
-		marginBottom: 5
+		marginBottom: 5,
 	},
 	bgImage: {
 		width: '100%',

@@ -10,10 +10,10 @@ export default function ExperienceListitem({
 }: ExperienceListitemProps) {
 	return (
 		<View style={styles.container}>
-			<Image style={styles.Image} source={{ uri: experience.companyImage }} />
+			<Image style={styles.Image} source={{ uri: experience.companyimage }} />
 			<View>
 				<Text style={styles.title}>{experience.title}</Text>
-				<Text>{experience.companyName}</Text>
+				<Text>{experience.companyname}</Text>
 			</View>
 		</View>
 	);
