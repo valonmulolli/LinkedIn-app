@@ -21,25 +21,25 @@ export default function Post() {
 	const navigation = useNavigation();
 	const router = useRouter();
 	const [handleMutation, { loading, error, data }] = useMutation(insertPost);
-	const [text, setText] = useState('');
+	const [content, setContent] = useState('');
 	const [image, setImage] = useState<string | null>(null);
 
 	const onPost = async () => {
-		console.warn(`Posting: ${text}`);
+		console.warn(`Posting: ${content}`);
 
 		try {
 			await handleMutation({
 				variables: {
 					userid: 2,
-					text,
+					content,
 				},
 			});
 
 			router.push('/(tabs)/');
-			setText('');
+			setContent('');
 			setImage(null);
 		} catch (e) {
-			console.log(e); 
+			console.log(e);
 		}
 	};
 
@@ -74,11 +74,11 @@ export default function Post() {
 	return (
 		<View style={styles.container}>
 			<TextInput
-				value={text}
-				onChangeText={setText}
+				value={content}
+				onChangeText={setContent}
 				placeholder='What do you want to talk about'
 				style={styles.input}
-				multiline={true}
+				multiline
 			/>
 
 			{image && <Image source={{ uri: image }} style={styles.image} />}
