@@ -6,7 +6,7 @@ import Colors from '@/constants/Colors';
 import MyNetwork from './network';
 import Post from './post';
 import Notifications from './notifications';
-import Jobs from './jobs';
+import Profile from './profile'
 
 
 function TabBarIcon(props: {
@@ -70,11 +70,11 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name='jobs'
+				name='profile'
 				options={{
-					title: 'Jobs',
+					title: 'Profile',
 					tabBarIcon: ({ color }) => (
-						<TabBarIcon name='briefcase' color={color} />
+						<TabBarIcon name='user' color={color} />
 					),
 				}}
 			/>

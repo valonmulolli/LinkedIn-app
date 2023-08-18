@@ -5,6 +5,7 @@ import { useLayoutEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { gql, useMutation } from '@apollo/client';
+import { useUserContext } from '@/context/UserContext';
 
 const insertPost = gql`
 	mutation MyMutation($userid: ID, $image: String, $content: String!) {
@@ -20,17 +21,16 @@ const insertPost = gql`
 export default function Post() {
 	const navigation = useNavigation();
 	const router = useRouter();
-	const [handleMutation, { loading, error, data }] = useMutation(insertPost);
+	const {dbUser} = useUserContext()
+	const [handleMutation, { loading, error, data }] = useMutation(insertPost, {refetchQueries: ['postPaginatedListQuery']});
 	const [content, setContent] = useState('');
 	const [image, setImage] = useState<string | null>(null);
 
 	const onPost = async () => {
-		console.warn(`Posting: ${content}`);
-
 		try {
 			await handleMutation({
 				variables: {
-					userid: 2,
+					userid: dbUser.id,
 					content,
 				},
 			});

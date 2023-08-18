@@ -3,7 +3,11 @@
 # dependencies
 node_modules/
 
+# env
+.env
+
 # Expo
+.vscode
 .expo/
 dist/
 web-build/
